@@ -17,6 +17,7 @@ module Api
     , dumpTask
     , verify, ProverAnswer(..), VerificationResult(..)
     , exportMegalodon
+    , showFailedTask
     , WithCache(..)
     , WithFilter(..)
     , WithOmissions(..)
@@ -29,6 +30,7 @@ module Api
     , WithParseOnly(..)
     , Options(..)
     , WithDumpPremselTraining(..)
+    , WithFailList(..)
     ) where
 
 
@@ -285,6 +287,15 @@ exportMegalodon file = do
     pure (Megalodon.encodeBlocks lexicon blocks)
 
 
+-- | This could be expandend with the dump case, with dump off just this and if dump is on it could show the number off the task. For quick use
+showFailedTask :: (a, ProverAnswer) -> IO()
+showFailedTask (_, Yes ) = Text.putStrLn ""
+showFailedTask (_, No tptp) = Text.putStrLn (Text.pack ("Prover found countermodel: " ++ Text.unpack(Text.unlines (take 1 (Text.splitOn "." tptp)))))
+showFailedTask (_, ContradictoryAxioms tptp) = Text.putStrLn (Text.pack ("Contradictory axioms: " ++ Text.unpack(Text.unlines (take 1 (Text.splitOn "." tptp)))))
+showFailedTask (_, Uncertain tptp) = Text.putStr (Text.pack ("Out of resources: " ++ Text.unpack(Text.unlines (take 1 (Text.splitOn "." tptp)))))
+showFailedTask (_, _) = Text.putStrLn "Error!"
+
+
 -- | Should we use caching?
 data WithCache = WithoutCache | WithCache deriving (Show, Eq)
 
@@ -312,6 +323,8 @@ pattern WithoutDump = WithDump ""
 
 data WithParseOnly = WithoutParseOnly | WithParseOnly deriving (Show, Eq)
 
+data WithFailList = WithoutFailList | WithFailList deriving (Show, Eq)
+
 
 data Options = Options
     { inputPath :: FilePath
@@ -327,4 +340,5 @@ data Options = Options
     , withVersion :: WithVersion
     , withMegalodon :: WithMegalodon
     , withDumpPremselTraining :: WithDumpPremselTraining
+    , withFailList :: WithFailList
     }
