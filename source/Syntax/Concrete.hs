@@ -342,6 +342,18 @@ grammar lexicon@Lexicon{..} = mdo
     fixSuchThat      <- rule $ FixSuchThat <$> (_fix *> math varSymbols) <* _suchThat <*> stmt <* _dot <*> proof
     fix              <- rule $ fixSymbolic <|> fixSuchThat
 
+
+    -- We want to have a function such that we can specifaclly take a struct with an specific behavior.
+    -- Take struct phrase $X$ such that,
+    -- \begin{enum}
+    --      struct specific funs and cons has to be declared here 
+    --      ........
+    -- \begin{enum} 
+    --
+    --
+
+    takestruct       <- rule $ TakeStruct <$> 
+
     takeVar          <- rule $ TakeVar <$> (_take *> beginMath *> varSymbols) <*> maybeBounded <* endMath <* _suchThat <*> stmt <*> justification <* _dot <*> proof
     takeNoun         <- rule $ TakeNoun <$> (_take *> _an *> (nounPhrase' <|> nounPhrasePl)) <*> justification <* _dot <*> proof
     take             <- rule $ takeVar <|> takeNoun
@@ -383,6 +395,8 @@ grammar lexicon@Lexicon{..} = mdo
                                     <*> (beginMath *> varSymbol) <*> (paren varSymbol <* _eq <* endMath)
                                     <*> cases (many1 functionDefineCase)
                                     <*> proof
+
+
 
 
 

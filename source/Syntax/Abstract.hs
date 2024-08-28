@@ -353,6 +353,10 @@ data Proof
     | FixSuchThat (NonEmpty VarSymbol) Stmt Proof
     | Calc Calc Proof
     -- ^ Simplify goals that are implications or disjunctions.
+
+    | TakeStruct StructInstance Proof
+
+
     | TakeVar (NonEmpty VarSymbol) Bound Stmt Justification Proof
     | TakeNoun (NounPhrase []) Justification Proof
     | Have (Maybe Stmt) Stmt Justification Proof
@@ -441,6 +445,12 @@ data Signature
     -- ^ /@$\<symbol\>(\<vars\>)$ is a \<noun\>@/
     deriving (Show, Eq, Ord)
 
+data StructInstance = StructInstance
+    { structInsPhrase :: StructPhrase,
+      structInsParents :: [StructPhrase],
+      structInsLabel :: VarSymbol,
+      structInsFixes :: [StructSymbol]
+    }
 
 data StructDefn = StructDefn
     { structPhrase :: StructPhrase
