@@ -354,7 +354,7 @@ data Proof
     | Calc Calc Proof
     -- ^ Simplify goals that are implications or disjunctions.
 
-    | TakeStruct StructInstance Proof
+    | TakeStruct (NounPhrase []) (NonEmpty VarSymbol) Stmt Proof
 
 
     | TakeVar (NonEmpty VarSymbol) Bound Stmt Justification Proof

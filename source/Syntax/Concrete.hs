@@ -352,11 +352,11 @@ grammar lexicon@Lexicon{..} = mdo
     --
     --
 
-    takestruct       <- rule $ TakeStruct <$> 
+    takestruct       <- rule $ TakeStruct <$> (_take *> _an *> nounPhrase)  <*> paren varSymbols <* _suchThat <*> stmt <* _dot <*> proof 
 
     takeVar          <- rule $ TakeVar <$> (_take *> beginMath *> varSymbols) <*> maybeBounded <* endMath <* _suchThat <*> stmt <*> justification <* _dot <*> proof
     takeNoun         <- rule $ TakeNoun <$> (_take *> _an *> (nounPhrase' <|> nounPhrasePl)) <*> justification <* _dot <*> proof
-    take             <- rule $ takeVar <|> takeNoun
+    take             <- rule $ takeVar <|> takeNoun <|> takestruct
     suffices         <- rule $ Suffices <$> (_sufficesThat *> stmt) <*> (justification <* _dot) <*> proof
     subclaim         <- rule $ Subclaim <$> (_show *> stmt <* _dot) <*> env_ "subproof" proof <*> proof
     have             <- rule $ Have <$> optional (_since *> stmt <* _comma <* _have) <* optional _haveIntro <*> stmt <*> justification <* _dot <*> proof
